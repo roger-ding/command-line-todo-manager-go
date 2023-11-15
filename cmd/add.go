@@ -22,10 +22,11 @@ var addCmd = &cobra.Command{
   Run: func(cmd *cobra.Command, args []string) {
     taskToAdd := strings.Join(args, "")
     if len(taskToAdd) == 0 {
-      fmt.Println("empty!")
+      fmt.Println("Task input is empty, please provide correct input!")
       return
     }
-    sql.AddTask(taskToAdd, "NOT DONE")
+
+    sql.AddTask(taskToAdd, "incomplete")
     fmt.Printf("Added the following task to todo list: '%s'\n", taskToAdd)
   },
 }

@@ -1,40 +1,74 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2023 Roger Ding 
 */
 package cmd
 
 import (
   "fmt"
 
+  "github.com/roger-ding/command-line-todo-manager-go/sql"
   "github.com/spf13/cobra"
+)
+
+const (
+  incompleteBox = "\u2610"
+  completeBox = "\u2611"
+)
+
+var (
+  incompleteList []sql.TodoTask
+  completedList []sql.TodoTask
+  allList []sql.TodoTask
 )
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
   Use:   "list",
-  Short: "A brief description of your command",
-  Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+  Short: "Lists all tasks from todo list, can specify incomplete and completed tasks",
+  Example: `
+  command-line-todo-manager-go list
+    - lists all tasks
+  command-line-todo-manager-go list -i
+    - lists tasks that are incomplete
+  command-line-todo-manager-go list -c
+    - lists tasks that are completed
+  `,
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
   Run: func(cmd *cobra.Command, args []string) {
-    fmt.Println("list called")
+    tasks := sql.GetAllTasks()
+    for _, task := range tasks {
+      if task.Status == "incomplete" {
+        incompleteList = append(incompleteList, task)
+      } 
+      if task.Status == "completed" {
+        completedList = append(completedList, task)
+      }
+      allList = append(allList, task)
+    }
+
+    var printList []sql.TodoTask
+    if incompleteFlag, _ := cmd.Flags().GetBool("incomplete"); incompleteFlag {
+      printList = incompleteList
+    } else if completedFlag, _ := cmd.Flags().GetBool("completed"); completedFlag {
+      printList = completedList
+    } else {
+      printList = allList 
+    }
+
+    for _, task := range printList {
+      var boxStatus string
+      if task.Status == "completed" {
+        boxStatus = completeBox
+      } else {
+        boxStatus = incompleteBox
+      }
+      fmt.Println(boxStatus, task.Id, task.Task)
+    }
   },
 }
 
 func init() {
   rootCmd.AddCommand(listCmd)
-
-  // Here you will define your flags and configuration settings.
-
-  // Cobra supports Persistent Flags which will work for this command
-  // and all subcommands, e.g.:
-  // listCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-  // Cobra supports local flags which will only run when this command
-  // is called directly, e.g.:
-  // listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+  listCmd.Flags().BoolP("incomplete", "i", false, "Lists incomplete todo tasks")
+  listCmd.Flags().BoolP("completed", "c", false, "Lists completed todo tasks")
 }
