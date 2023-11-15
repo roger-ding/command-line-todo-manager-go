@@ -20,8 +20,8 @@ func testInit(t *testing.T) {
 }
 
 func testAdd(t *testing.T) {
-  AddTask("test task 1", "NOT DONE")
-  AddTask("test task 2", "DONE")
+  AddTask("test task 1", "incomplete")
+  AddTask("test task 2", "completed")
   log.Println("Test - Task add successful!")
 }
 
@@ -29,10 +29,10 @@ func testGetTask(t *testing.T) {
   allTasks := GetAllTasks()
   for _, task := range allTasks {
     if task.Task == "test task 1" {
-      assert.Equal(t, task.Status, "NOT DONE")
+      assert.Equal(t, task.Status, "incomplete")
     }
     if task.Task == "test task 2" {
-      assert.Equal(t, task.Status, "DONE")
+      assert.Equal(t, task.Status, "completed")
     }
   }
   log.Println("Test - Task get successful!")
@@ -42,20 +42,20 @@ func testUpdate(t *testing.T) {
   allTasks := GetAllTasks()
   for _, task := range allTasks {
     if task.Task == "test task 1" {
-      UpdateTaskStatus(task, "DONE")
+      UpdateTaskStatus(task, "completed")
     }
     if task.Task == "test task 2" {
-      UpdateTaskStatus(task, "NOT_STATUS_MESSAGE")
+      UpdateTaskStatus(task, "random_message")
     }
   }
   
   allTasks2 := GetAllTasks()
   for _, task := range allTasks2 {
     if task.Task == "test task 1" {
-      assert.Equal(t, task.Status, "DONE")
+      assert.Equal(t, task.Status, "completed")
     }
     if task.Task == "test task 2" {
-      assert.Equal(t, task.Status, "NOT_STATUS_MESSAGE")
+      assert.Equal(t, task.Status, "random_message")
     }
   }
   log.Println("Test - Task get all successful!")
