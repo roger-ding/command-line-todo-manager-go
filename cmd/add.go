@@ -5,8 +5,9 @@ package cmd
 
 import (
   "fmt"
+  "strings"
 
-  //"github.com/roger-ding/command-line-todo-manager-go/sql"
+  "github.com/roger-ding/command-line-todo-manager-go/sql"
   "github.com/spf13/cobra"
 )
 
@@ -19,8 +20,13 @@ var addCmd = &cobra.Command{
   `,
 
   Run: func(cmd *cobra.Command, args []string) {
-    fmt.Println("add called")
-    fmt.Println(args[0])
+    taskToAdd := strings.Join(args, "")
+    if len(taskToAdd) == 0 {
+      fmt.Println("empty!")
+      return
+    }
+    sql.AddTask(taskToAdd, "NOT DONE")
+    fmt.Printf("Added the following task to todo list: '%s'\n", taskToAdd)
   },
 }
 
