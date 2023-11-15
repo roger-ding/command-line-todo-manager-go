@@ -10,12 +10,5 @@ import (
 
 func main() {
   sql.Initialize()
-  /*
-  taskGet, err := sql.GetSingleTask(tasks, 1)
-  if err != nil {
-    panic(err)
-  }
-  sql.UpdateTaskStatus(*taskGet, "DONE")
-  */
   cmd.Execute()
 }
