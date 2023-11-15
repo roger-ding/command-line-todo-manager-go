@@ -4,7 +4,7 @@ Copyright © 2023 Roger Ding
 package main
 
 import (
-	"fmt"
+	//"fmt"
 
 	"github.com/roger-ding/command-line-todo-manager-go/sql"
 	"github.com/roger-ding/command-line-todo-manager-go/cmd"
@@ -17,6 +17,7 @@ const (
 
 func main() {
   sql.Initialize()
+  /*
   sql.AddTask("wash dishes", "NOT DONE")
   sql.AddTask("take out trash", "NOT DONE")
   
@@ -38,6 +39,6 @@ func main() {
   }
   sql.DeleteTask(*taskGet)
   sql.UpdateTaskStatus(*taskGet, "DONE")
-
+  */
   cmd.Execute()
 }
